@@ -108,6 +108,13 @@ public class Day15Part2 {
 
 
     private static boolean move(int x, int y, String direction, List<List<String>> w){
+        for(int i =0;i<w.size();i++){
+                for(int j=0;j<w.get(0).size();j++){
+                    System.out.print(w.get(i).get(j));
+                }
+                System.out.print("\n");
+        }
+        System.out.println("Move " + direction);
         int originalX = x;
         int originalY = y;
         switch (direction){
@@ -173,6 +180,8 @@ public class Day15Part2 {
                 break;
         }
 
+
+
         boolean canOtherside = false;
         if(w.get(originalY).get(originalX).equals("[") && checkbrother){
             canOtherside = canMoveBox(originalX+1,originalY, direction,w, false);
@@ -180,11 +189,13 @@ public class Day15Part2 {
             canOtherside = canMoveBox(originalX-1,originalY, direction,w, false);
         }
 
-        if(w.get(y).get(x).equals("[") || w.get(y).get(x).equals("]") ){
-            return canMoveBox(x,y,direction,w,true);
+        if(checkbrother && !canOtherside){
+            return false;
         } else if(w.get(y).get(x).equals("#")){
             return false;
-        } else if(canOtherside || !checkbrother){
+        } else if(w.get(y).get(x).equals("[") || w.get(y).get(x).equals("]") ){
+            return canMoveBox(x,y,direction,w,true);
+        }  else if(canOtherside || !checkbrother){
             return true;
         }
 

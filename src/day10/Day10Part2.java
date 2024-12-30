@@ -12,27 +12,26 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class Day10 {
+public class Day10Part2 {
 
     public static void main(String[] args) {
         var filePath = "/day10.txt";
         List<List<Integer>> map = readLists(filePath);
+
         int totalScore = 0;
         for (int y = 0; y < map.size(); y++) {
             for (int x = 0; x < map.get(y).size(); x++) {
                 if (map.get(y).get(x) == 0) {
-                    Set<Point> endPositions = new HashSet<>();
-                    walkTrail(x, y, endPositions, map);
-                    totalScore += endPositions.size();
+                    totalScore += walkTrail(x, y, map);
                 }
             }
         }
 
         System.out.println("Total Score: " + totalScore);
+
     }
 
     private static List<List<Integer>> readLists(String filePath) {
-        int lines = 0;
 
         List<List<Integer>> map = new ArrayList<>();
 
@@ -56,29 +55,31 @@ public class Day10 {
     }
 
 
-    private static void walkTrail(int x, int y, Set<Point> endPositions, List<List<Integer>> map) {
+    private static int walkTrail(int x, int y,List<List<Integer>> map) {
         int height = map.get(y).get(x);
         if (height == 9) {
-            endPositions.add(new Point(x, y));
-            return;
+            return 1;
         }
 
+        int score = 0;
         // left
         if (x > 0 && map.get(y).get(x-1) == height + 1) {
-            walkTrail(x - 1, y, endPositions, map);
+            score += walkTrail(x - 1, y, map);
         }
         // up
         if (y > 0 && map.get(y-1).get(x) == height + 1) {
-            walkTrail(x, y - 1, endPositions, map);
+            score += walkTrail(x, y - 1, map);
         }
         // right
         if (x < map.get(y).size() - 1 && map.get(y).get(x+1) == height + 1) {
-            walkTrail(x + 1, y, endPositions, map);
+            score += walkTrail(x + 1, y, map);
         }
         // down
         if (y < map.size() - 1 && map.get(y+1).get(x) == height + 1) {
-            walkTrail(x, y + 1, endPositions, map);
+            score += walkTrail(x, y + 1, map);
         }
+
+        return score;
     }
 
     private static class Point {
